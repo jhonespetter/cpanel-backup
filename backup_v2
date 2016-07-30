@@ -1,0 +1,42 @@
+#!/bin/sh
+#===============================================================================#
+#  NOTA DE LICENÇA                                                              #
+#                                                                               #
+#  Este trabalho esta licenciado sob uma Licença Creative Commons               #
+#  Atribuição: Compartilhamento pela mesma Licença 3.0 Brasil. Para ver uma     #
+# copia desta licença, visite http://creativecommons.org/licenses/by/3.0/br/    #
+# ou envie uma carta para Creative Commons, 171 Second Street, Suite 300,       #
+# San Francisco, California 94105, USA.                                         #
+# ----------------------------------------------------------------------------  #
+#  Autor: Jhones Petter | jhones.petter@gmail.com em 31/01/2015                 #
+#  Descrição: Backup dos Sites e Bancos em Hospedagem, complemento com função   #
+# PEGA_BACKUP para download dos arquivos e limpeza dos directórios.             #
+#  Data criação: 31/01/2015                                                     #
+#  Versao: 2.0 - (./backup_v2.sh)                                               #
+# ----------------------------------------------------------------------------- #
+#  Alterações:                                                                  #
+#   Jhones Petter - 03/02/2015 - Geração dos backups dos sites em único         #
+# arquivo tarball, centralizando na variável DIRS.                              #
+#===============================================================================#
+
+dir_mysql="/home/hospedagem/backup/mysql"
+dir_sites="/home/hospedagem/backup/sites"
+tar="/home/hospedagem/backup/sites/hospedagem-sites-$(date "+%d%m%y").tar.gz"
+dir1="/home/hospedagem/public_html/directorio1"
+dir2="/home/hospedagem/backup/backup.sh"
+dir3="/home/hospedagem/public_html/directorio3"
+dirs="$dir1 $dir2 $dir3"
+
+gera_sql() {
+mysqldump -u nome_user_base1 -psenha_user_base1 nome_base1 | gzip > $dir_mysql/nome_base1-$(date "+%d%m%y").sql.gz
+mysqldump -u nome_user_base2 -psenha_user_base2 nome_base2 | gzip > $dir_mysql/nome_base2-$(date "+%d%m%y").sql.gz
+}
+
+gera_tar() {
+tar -vzcf $tar $dirs
+}
+
+gera_sql
+gera_tar
+
+exit
